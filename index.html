@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>In Loving Memory - August 10th, 2025</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="importmap">
       {
@@ -92,8 +91,8 @@
 </head>
 <body class="font-lato bg-cream text-charcoal dark:bg-charcoal-dark dark:text-cream">
     <!-- Sticky Nav -->
-    <nav id="navbar" class="fixed top-0 left-0 right-0 z-40 transition-all duration-300">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-40 transition-all duration-300 nav-scrolled">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-16">
             <div class="flex items-center justify-between h-20">
                 <div class="flex-shrink-0">
                     <a href="#" class="text-gray-700 font-playfair text-xl">Brendan McVetty</a>
@@ -130,7 +129,7 @@
                 <a href="#itinerary" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Service</a>
                 <a href="#rsvp" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">RSVP</a>
                  <button id="theme-toggle-mobile" type="button" class="w-full text-left text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium" aria-label="Toggle theme">
-                    Toggle Theme
+                    Toggle Dark/Light Mode
                 </button>
             </div>
         </div>
@@ -161,9 +160,9 @@
     <div id="details" class="max-w-7xl mx-auto py-16 sm:py-24 px-4 sm:px-6 lg:px-8">
         
         <div class="text-center mb-12 fade-in-up" style="translate: none; rotate: none; scale: none; transform: translate(0px, 0px); opacity: 1;">
-            <p class="text-3xl font-playfair  text-gray-800 dark:text-gray-400 max-w-2xl mx-auto">Please let us know that you will be joining us for the events below. Your presence is the greatest gift.</p>
+            <p class="text-3xl font-playfair  text-gray-800 dark:text-gray-400 max-w-2xl mx-auto px-6">Please let us know that you will be joining us for the events below. Your presence is the greatest gift.</p>
              <button id="rsvp-button" class="w-64 my-8 inline-flex items-center justify-center bg-charcoal hover:bg-black dark:bg-cream dark:hover:bg-gray-200 dark:text-charcoal text-white py-3 px-6 rounded-md transition-all duration-300 text-base font-medium cursor-pointer">
-                            <i class="fa fa-envelope w-5 h-5 mr-3"></i>RSVP
+                            <i class="fa fa-envelope w-5 h-5 mr-1 mt-1"></i>RSVP
                         </button>
         </div>
         
@@ -227,8 +226,8 @@
                     <h3 class="text-2xl font-playfair mb-4 text-charcoal dark:text-cream">Join Us | Give Back</h3>
                     <div class="flex flex-col sm:flex-row lg:flex-col gap-4">
                         
-                         <a href="https://www.sfmfoodbank.org/" class="w-full inline-flex items-center justify-center bg-accent hover:bg-opacity-90 text-white py-3 px-6 rounded-md transition-all duration-300 text-base font-medium" target="_blank">
-                            <i class="fa fa-heart w-5 h-5 mr-3"></i>
+                         <a href="https://www.sfmfoodbank.org/" class="w-full my-8 inline-flex items-center justify-center bg-charcoal hover:bg-black dark:bg-cream dark:hover:bg-gray-200 dark:text-charcoal text-white py-3 px-6 rounded-md transition-all duration-300 text-base font-medium cursor-pointer" target="_blank">
+                            <i class="fa fa-heart w-5 h-5 mr-1 mt-1"></i>
                             Donate in His Name
                         </a>
                     </div>
@@ -257,8 +256,8 @@
   <h3 class="text-3xl font-playfair mb-4 text-charcoal dark:text-cream">For Condolences:</h3>
   <!-- <img src="poster.jpg" alt="Poster" class="mx-auto mb-4 w-full max-w-md"> -->
   <p class="text-xl text-stone dark:text-gray-400">
-     
-    <a href="https://docs.google.com/forms/d/1T1VQSixKOXQILdIo3P8cEWXhEgTsJAQUIe7gI2OXCKA/viewform?ts=686c1d8a&edit_requested=true" target="_blank" rel="noopener noreferrer" class="text-accent hover:underline">Submit Here</a>
+     <a href="https://docs.google.com/forms/d/1T1VQSixKOXQILdIo3P8cEWXhEgTsJAQUIe7gI2OXCKA/viewform?ts=686c1d8a&edit_requested=true" target="_blank" rel="noopener noreferrer" class="w-64 my-8 inline-flex items-center justify-center bg-charcoal hover:bg-black dark:bg-cream dark:hover:bg-gray-200 dark:text-charcoal text-white py-3 px-6 rounded-md transition-all duration-300 text-base font-medium cursor-pointer">
+        <i class="fa fa-praying-hands w-5 h-5 mr-1 mt-3 mb-2"></i>Submit Here</a>
   </p>
 </div>
 
@@ -318,15 +317,15 @@
         themeToggleMobileBtn.addEventListener('click', toggleTheme);
 
         // --- Sticky Nav on Scroll ---
-        const nav = document.getElementById('navbar');
+        //const nav = document.getElementById('navbar');
         // Add a small buffer to avoid showing the scrolled nav right at the top
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                nav.classList.add('nav-scrolled');
-            } else {
-                nav.classList.remove('nav-scrolled');
-            }
-        });
+        // window.addEventListener('scroll', () => {
+        //     if (window.scrollY > 50) {
+        //         nav.classList.add('nav-scrolled');
+        //     } else {
+        //         nav.classList.remove('nav-scrolled');
+        //     }
+        // });
         
         // --- Mobile menu toggle ---
         const mobileMenuButton = document.getElementById('mobile-menu-button');
