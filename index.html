@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>In Loving Memory - August 10th, 2025</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "gsap": "https://cdn.skypack.dev/gsap",
+          "gsap/ScrollTrigger": "https://cdn.skypack.dev/gsap/ScrollTrigger",
+          "basiclightbox": "https://cdn.skypack.dev/basiclightbox"
+        }
+      }
+    </script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/basiclightbox@5.0.4/dist/basicLightbox.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Lato:wght@300;400;700&display=swap');
+        
+        .map-popup {
+            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.8);
+        }
+        
+        .gallery-item {
+            aspect-ratio: 1;
+            overflow: hidden;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .gallery-item:hover {
+            transform: scale(1.05);
+        }
+        
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .hero-text-shadow {
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Smooth scrolling for anchor links */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .nav-scrolled {
+            background-color: rgba(51, 51, 51, 0.9);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            backdrop-filter: blur(5px);
+        }
+        .hidden{display: none;}
+        #parallax-bg {background-attachment: fixed;}
+        .nav-scrolled a, .nav-scrolled i {
+            color: white ;
+            }
+    </style>
+     <script>
+        // On page load or when changing themes, best to add inline in `head` to avoid FOUC
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark')
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'playfair': ['Playfair Display', 'serif'],
+                        'lato': ['Lato', 'sans-serif'],
+                    },
+                    colors: {
+                        'cream': '#F8F5F2',
+                        'charcoal': '#333333',
+                        'charcoal-dark': '#1a1a1a',
+                        'stone': '#8D8D8D',
+                        'accent': '#C0A78E'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-lato bg-cream text-charcoal dark:bg-charcoal-dark dark:text-cream">
+    <!-- Sticky Nav -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-40 transition-all duration-300">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex-shrink-0">
+                    <a href="#" class="text-gray-700 font-playfair text-xl">Brendan McVetty</a>
+                </div>
+                <div class="hidden md:block">
+                    <div class="flex items-baseline space-x-8">
+                        <a href="#details" class="text-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Details</a>
+                        <a href="#itinerary" class="text-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Service</a>
+                        <a href="#rsvp" class="text-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">RSVP</a>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                     <button id="theme-toggle" type="button" class="text-gray-700 hover:text-white p-2 rounded-md focus:outline-none hidden md:block">
+                        <i id="theme-toggle-dark-icon" class="fa fa-sun-o h-5 w-5" aria-hidden="true"></i>
+                        <i id="theme-toggle-light-icon" class="fa fa-moon-o h-5 w-5" aria-hidden="true"></i>
+                    </button>
+                    <div class="-mr-2 flex md:hidden">
+                        <button id="mobile-menu-button" type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-300 hover:text-white focus:outline-none" aria-controls="mobile-menu" aria-expanded="false">
+                            <span class="sr-only">Open main menu</span>
+                            <svg class="block h-6 w-6" id="mobile-menu-open-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
+                            <svg class="hidden h-6 w-6" id="mobile-menu-close-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="md:hidden hidden" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-charcoal/90 backdrop-blur-sm">
+                <a href="#details" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Details</a>
+                <a href="#itinerary" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Service</a>
+                <a href="#rsvp" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">RSVP</a>
+                 <button id="theme-toggle-mobile" type="button" class="w-full text-left text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium" aria-label="Toggle theme">
+                    Toggle Theme
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- REMIXED Hero Section -->
+    <header class="bg-white dark:bg-charcoal">
+        <div class="grid grid-cols-1 md:grid-cols-2 min-h-[70vh] md:min-h-screen">
+            <!-- Text Content -->
+            <div class="flex flex-col justify-center p-8 md:p-12 lg:p-16 order-2 md:order-1">
+                <div class="max-w-md mx-auto md:mx-0">
+                    <h1 class="text-3xl md:text-4xl lg:text-5xl font-light tracking-wider text-charcoal dark:text-cream">A Celebration of Life of</h1>
+                    <h2 class="text-4xl md:text-5xl lg:text-6xl font-playfair font-bold text-accent mt-2">Brendan McVetty</h2>
+                    <p class="mt-6 text-xl md:text-2xl font-light text-charcoal dark:text-cream">Sunday, August 10th, 2025</p>
+                    <p class="mt-8 text-lg text-stone dark:text-gray-400 leading-relaxed border-l-4 border-accent pl-4">
+                        Please Join Us to reflect and celebrate the life of Brendan W. McVetty
+                    </p>
+                </div>
+            </div>
+             <!-- Image -->
+            <div class="bg-cover bg-center order-1 md:order-2 min-h-[40vh] md:min-h-screen" style="background-image: url('Brendan-McVetty.jpg');">
+            </div>
+        </div>
+    </header>
+
+
+    <!-- REMIXED Main Content Area -->
+    <div id="details" class="max-w-7xl mx-auto py-16 sm:py-24 px-4 sm:px-6 lg:px-8">
+        
+        <div class="text-center mb-12 fade-in-up" style="translate: none; rotate: none; scale: none; transform: translate(0px, 0px); opacity: 1;">
+            <p class="text-3xl font-playfair  text-gray-800 dark:text-gray-400 max-w-2xl mx-auto">Please let us know that you will be joining us for the events below. Your presence is the greatest gift.</p>
+             <button id="rsvp-button" class="w-64 my-8 inline-flex items-center justify-center bg-charcoal hover:bg-black dark:bg-cream dark:hover:bg-gray-200 dark:text-charcoal text-white py-3 px-6 rounded-md transition-all duration-300 text-base font-medium cursor-pointer">
+                            <i class="fa fa-envelope w-5 h-5 mr-3"></i>RSVP
+                        </button>
+        </div>
+        
+        <!-- Main Grid Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-5 lg:gap-x-16">
+            
+            <!-- ===== Left Column ===== -->
+            <main class="lg:col-span-3">
+
+                <!-- Reflection & Memorial Bench Section -->
+                <section id="itinerary" class="bg-white dark:bg-charcoal shadow-lg p-8 w-full fade-in-up mb-8 lg:mb-0">
+                    <h3 class="text-2xl font-playfair font-semibold text-charcoal dark:text-cream tracking-wider mb-4">Memorial Bench Dedication</h3>
+                    <p class="text-stone dark:text-gray-400 mb-6">We will gather on the boardwalk at the bench dedicated to Brendan to reflect and honor Brendan together.</p>
+
+                    <div class="space-y-6 my-8">
+                        <div class="border-l-4 border-accent pl-6 py-2">
+                            <h4 class="text-xl font-medium text-charcoal dark:text-cream">Welcome</h4>
+                            <p class="text-stone dark:text-gray-400">Opening remarks and reflection.</p>
+                        </div>
+                        <div class="border-l-4 border-accent pl-6 py-2">
+                            <h4 class="text-xl font-medium text-charcoal dark:text-cream">Eulogy & Tributes</h4>
+                            <p class="text-stone dark:text-gray-400">Sharing cherished memories and stories.</p>
+                        </div>
+                        <div class="border-l-4 border-accent pl-6 py-2">
+                             <h4 class="text-xl font-medium text-charcoal dark:text-cream">Reflection & Respects</h4>
+                            <p class="text-stone dark:text-gray-400">A moment for personal thoughts and prayers.</p>
+                        </div>
+                    </div>
+                    
+                    <h4 class="text-lg font-medium text-charcoal dark:text-cream mt-8">Jones Beach State Park Boardwalk</h4>
+                    <p class="text-stone dark:text-gray-400 mb-4">(between fields 4 and 6)</p>
+                    <p class="mb-1"><strong class="text-charcoal/80 dark:text-cream/80">Time:</strong> 10:30am - 11:00am</p>
+                    <p class="mb-4"><strong class="text-charcoal/80 dark:text-cream/80">GPS Address:</strong> 1 Ocean Pkwy, Wantagh, NY</p>
+                    <a href="https://www.google.com/maps/place/1+Ocean+Pkwy,+Wantagh,+NY+11793" target="_blank" class="text-accent hover:underline">View Map & Directions</a>
+                    <div class="bg-cream dark:bg-charcoal-dark rounded-lg p-4 mt-6 text-sm text-stone dark:text-gray-400">
+                        <p class="mb-1"><strong>Recommended Parking:</strong> Field 4</p>
+                        <p><strong>Details:</strong> Casual Attire. Standing Room Only.</p>
+                    </div>
+                    <div class="mt-6 rounded-lg overflow-hidden aspect-video">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3029.0264175373673!2d-73.51614712479015!3d40.60706664361521!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89e9d68529367c3b%3A0xe546b858d7c49352!2s1%20Ocean%20Pkwy%2C%20Wantagh%2C%20NY%2011793%2C%20USA!5e0!3m2!1sen!2sca!4v1716312345678!5m2!1sen!2sca" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </section>
+                
+            </main>
+
+            <!-- ===== Right Column (Sticky Sidebar) ===== -->
+            <aside class="lg:col-span-2 lg:sticky lg:top-24 h-fit">
+
+                 <!-- Celebration Card -->
+                <div class="bg-white dark:bg-charcoal shadow-lg p-8 w-full fade-in-up mb-8">
+                    <h3 class="text-2xl font-playfair font-semibold text-charcoal dark:text-cream tracking-wider mb-4">Celebration</h3>
+                    <h4 class="text-lg font-medium text-charcoal dark:text-cream">The St. James Backyard Patio</h4>
+                    <p class="text-stone dark:text-gray-400 mb-4">Brunch</p>
+                    <p class="mb-1"><strong class="text-charcoal/80 dark:text-cream/80">Time:</strong> 12:00pm - 3:00pm</p>
+                    <p class="mb-4"><strong class="text-charcoal/80 dark:text-cream/80">Address:</strong> 190 2nd St, Mineola, NY</p>
+                    <a href="https://www.google.com/maps/place/190+2nd+St,+Mineola,+NY+11501" target="_blank" class="text-accent hover:underline">View Map & Directions</a>
+                </div>
+
+                <!-- RSVP & Donation Card -->
+                 <div id="rsvp" class="bg-white dark:bg-charcoal shadow-lg p-8 w-full fade-in-up">
+                    <h3 class="text-2xl font-playfair mb-4 text-charcoal dark:text-cream">Join Us | Give Back</h3>
+                    <div class="flex flex-col sm:flex-row lg:flex-col gap-4">
+                        
+                         <a href="https://www.sfmfoodbank.org/" class="w-full inline-flex items-center justify-center bg-accent hover:bg-opacity-90 text-white py-3 px-6 rounded-md transition-all duration-300 text-base font-medium" target="_blank">
+                            <i class="fa fa-heart w-5 h-5 mr-3"></i>
+                            Donate in His Name
+                        </a>
+                    </div>
+                </div>
+
+            </aside>
+
+        </div>
+    </div>
+
+
+    <!-- Parallax Quote Section -->
+    <div id="parallax-section" class="relative h-[50vh] min-h-[400px] flex items-center justify-center text-white my-16 md:my-24 overflow-hidden">
+        <div id="parallax-bg" class="absolute inset-0 bg-cover bg-center bg-fixed z-0" style="background-image: url('bench.jpg');"></div>
+        <div class="absolute inset-0 bg-black/50 z-10"></div>
+        <div class="relative z-20 text-center p-4">
+            <blockquote class="text-2xl md:text-3xl lg:text-4xl font-playfair italic hero-text-shadow max-w-4xl mx-auto fade-in-up leading-relaxed">
+                “Going home, going home by the waterside, I will rest my bones. Listen to the river sing sweet songs to rock my soul.”
+            </blockquote>
+            <p class="mt-4 text-lg md:text-xl font-lato hero-text-shadow fade-in-up" style="--delay: 0.1s;">- Grateful Dead</p>
+        </div>
+    </div>
+    
+    <!-- Condolences Section -->
+   <div class="text-center pb-24 px-4 bg-cream dark:bg-charcoal-dark">
+  <h3 class="text-3xl font-playfair mb-4 text-charcoal dark:text-cream">For Condolences:</h3>
+  <!-- <img src="poster.jpg" alt="Poster" class="mx-auto mb-4 w-full max-w-md"> -->
+  <p class="text-xl text-stone dark:text-gray-400">
+     
+    <a href="https://docs.google.com/forms/d/1T1VQSixKOXQILdIo3P8cEWXhEgTsJAQUIe7gI2OXCKA/viewform?ts=686c1d8a&edit_requested=true" target="_blank" rel="noopener noreferrer" class="text-accent hover:underline">Submit Here</a>
+  </p>
+</div>
+
+    <!-- RSVP Modal -->
+    <div id="rsvpModal" class="fixed inset-0 map-popup hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-charcoal shadow-2xl max-w-2xl w-full h-[85vh] overflow-hidden flex flex-col">
+            <div class="flex items-center justify-between p-6 border-b dark:border-gray-700">
+                <h3 class="text-2xl font-playfair text-charcoal dark:text-cream">RSVP</h3>
+                <button id="rsvp-close-button" class="text-stone dark:text-gray-400 hover:text-charcoal dark:hover:text-white transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="flex-grow bg-gray-100 dark:bg-charcoal-dark">
+                <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSf-WSetHWq-u9y4w5n05Mt-sLc0iKAyI65eDQyaq52XpFXviA/viewform?embedded=true" width="100%" height="100%" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { gsap } from 'gsap';
+        import { ScrollTrigger } from 'gsap/ScrollTrigger';
+        import basicLightbox from 'basiclightbox';
+
+        gsap.registerPlugin(ScrollTrigger);
+
+        // --- Dark Mode Toggle ---
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const themeToggleMobileBtn = document.getElementById('theme-toggle-mobile');
+        const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+        const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+
+        function updateThemeIcons() {
+            if (document.documentElement.classList.contains('dark')) {
+                themeToggleLightIcon.classList.add('hidden');
+                themeToggleDarkIcon.classList.remove('hidden');
+            } else {
+                themeToggleDarkIcon.classList.add('hidden');
+                themeToggleLightIcon.classList.remove('hidden');
+            }
+        }
+        
+        updateThemeIcons();
+
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+            if (document.documentElement.classList.contains('dark')) {
+                localStorage.theme = 'dark';
+            } else {
+                localStorage.theme = 'light';
+            }
+            updateThemeIcons();
+        }
+
+        themeToggleBtn.addEventListener('click', toggleTheme);
+        themeToggleMobileBtn.addEventListener('click', toggleTheme);
+
+        // --- Sticky Nav on Scroll ---
+        const nav = document.getElementById('navbar');
+        // Add a small buffer to avoid showing the scrolled nav right at the top
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                nav.classList.add('nav-scrolled');
+            } else {
+                nav.classList.remove('nav-scrolled');
+            }
+        });
+        
+        // --- Mobile menu toggle ---
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const openIcon = document.getElementById('mobile-menu-open-icon');
+        const closeIcon = document.getElementById('mobile-menu-close-icon');
+
+        mobileMenuButton.addEventListener('click', () => {
+            const isExpanded = mobileMenuButton.getAttribute('aria-expanded') === 'true';
+            mobileMenuButton.setAttribute('aria-expanded', !isExpanded);
+            mobileMenu.classList.toggle('hidden');
+            openIcon.classList.toggle('hidden');
+            closeIcon.classList.toggle('hidden');
+        });
+
+        mobileMenu.addEventListener('click', (e) => {
+            if (e.target.tagName === 'A' || e.target.tagName === 'BUTTON') {
+                mobileMenu.classList.add('hidden');
+                openIcon.classList.remove('hidden');
+                closeIcon.classList.add('hidden');
+                mobileMenuButton.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        // --- Fade in up animation ---
+        gsap.utils.toArray('.fade-in-up').forEach((elem, i) => {
+            gsap.fromTo(elem, 
+                { opacity: 0, y: 50 },
+                { 
+                    opacity: 1, 
+                    y: 0, 
+                    duration: 0.8,
+                    delay: parseFloat(elem.style.animationDelay) || 0,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: elem,
+                        start: 'top 90%',
+                        toggleActions: 'play none none none'
+                    }
+                }
+            );
+        });
+
+        // --- Parallax Section ---
+        gsap.to("#parallax-bg", {
+            backgroundPosition: "50% 100%", // Animate background position for a subtle parallax
+            ease: "none",
+            scrollTrigger: {
+                trigger: "#parallax-section",
+                start: "top bottom",
+                end: "bottom top",
+                scrub: true
+            }
+        });
+
+        // --- Gallery Lightbox ---
+        const gallery = document.getElementById('gallery');
+        if (gallery) {
+            gallery.addEventListener('click', e => {
+                if (e.target.closest('a')) {
+                    e.preventDefault();
+                    const link = e.target.closest('a');
+                    basicLightbox.create(`<img src="${link.href}">`).show();
+                }
+            });
+        }
+        
+        // --- RSVP Modal Logic ---
+        const rsvpModal = document.getElementById('rsvpModal');
+        const rsvpButton = document.getElementById('rsvp-button');
+        const rsvpCloseButton = document.getElementById('rsvp-close-button');
+
+        const openRsvpModal = () => {
+            if (rsvpModal) {
+                rsvpModal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+        };
+
+        const closeRsvpModal = () => {
+            if (rsvpModal) {
+                rsvpModal.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            }
+        };
+
+        if (rsvpButton) rsvpButton.addEventListener('click', openRsvpModal);
+        if (rsvpCloseButton) rsvpCloseButton.addEventListener('click', closeRsvpModal);
+
+        if (rsvpModal) {
+            rsvpModal.addEventListener('click', (e) => (e.target === rsvpModal) && closeRsvpModal());
+        }
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !rsvpModal.classList.contains('hidden')) {
+                closeRsvpModal();
+            }
+        });
+        
+    </script>
+</body>
+</html>
